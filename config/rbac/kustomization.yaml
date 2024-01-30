@@ -1,0 +1,27 @@
+resources:
+# All RBAC will be applied under this service account in
+# the deployment namespace. You may comment out this resource
+# if your manager will use a service account that exists at
+# runtime. Be sure to update RoleBinding and ClusterRoleBinding
+# subjects if changing service account names.
+- service_account.yaml
+- role.yaml
+- role_binding.yaml
+- leader_election_role.yaml
+- leader_election_role_binding.yaml
+# Comment the following 4 lines if you want to disable
+# the auth proxy (https://github.com/brancz/kube-rbac-proxy)
+# which protects your /metrics endpoint.
+- auth_proxy_service.yaml
+- auth_proxy_role.yaml
+- auth_proxy_role_binding.yaml
+- auth_proxy_client_clusterrole.yaml
+# extra service accounts from helm charts
+- service_account_exascaler-csi-controller.yaml
+- service_account_exascaler-csi-node.yaml
+- role_exascaler-csi-controller.yaml
+- role_exascaler-csi-node.yaml
+- role_binding_exascaler-csi-controller.yaml
+- role_binding_exascaler-csi-node.yaml
+- priviledged-scc-role.yaml
+- priviledged-scc-role-binding.yaml

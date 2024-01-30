@@ -1,0 +1,134 @@
+# ----------------------
+# Exascaler CSI Driver
+# ----------------------
+
+apiVersion: storage.k8s.io/v1
+kind: CSIDriver
+metadata:
+  name: exa.csi.ddn.com
+spec:
+  attachRequired: false
+  podInfoOnMount: false
+---
+
+
+# ---------------------------------
+# Exascaler CSI Controller Server
+# ---------------------------------
+#
+# Runs single driver controller server (driver + provisioner + attacher + snapshotter) on one of the nodes
+#
+
+kind: Service
+apiVersion: v1
+metadata:
+  name: exascaler-csi-controller-service
+  labels:
+    app: exascaler-csi-controller
+spec:
+  selector:
+    app: exascaler-csi-controller
+  ports:
+    - name: dummy
+      port: 12345
+---
+
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: exascaler-csi-controller
+spec:
+  # serviceName: exascaler-csi-controller-service
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: exascaler-csi-controller # has to match .spec.template.metadata.labels
+  template:
+    metadata:
+      labels:
+        app: exascaler-csi-controller
+    spec:
+      serviceAccount: exascaler-csi-controller-service-account
+      containers:
+        # csi-provisioner: sidecar container that watches Kubernetes PersistentVolumeClaim objects
+        # and triggers CreateVolume/DeleteVolume against a CSI endpoint
+        - name: csi-provisioner
+          image: k8s.gcr.io/sig-storage/csi-provisioner:v3.0.0
+          imagePullPolicy: IfNotPresent
+          args:
+            - --csi-address=/var/lib/csi/sockets/pluginproxy/csi.sock
+            - --volume-name-prefix={{ .Values.volumeNamePrefix }}
+            - --strict-topology
+            - --immediate-topology=false
+            - --feature-gates=Topology=true
+          volumeMounts:
+            - name: socket-dir
+              mountPath: /var/lib/csi/sockets/pluginproxy
+        - name: csi-attacher
+          image: k8s.gcr.io/sig-storage/csi-attacher:v3.5.0
+          imagePullPolicy: IfNotPresent
+          args:
+            - --csi-address=$(ADDRESS)
+            - --v=2
+            - --leader-election=true
+          env:
+            - name: ADDRESS
+              value: /var/lib/csi/sockets/pluginproxy/csi.sock
+          volumeMounts:
+            - name: socket-dir
+              mountPath: /var/lib/csi/sockets/pluginproxy/
+        - name: csi-resizer
+          image: k8s.gcr.io/sig-storage/csi-resizer:v1.4.0
+          args:
+            - "--csi-address=$(ADDRESS)"
+          env:
+            - name: ADDRESS
+              value: /var/lib/csi/sockets/pluginproxy/csi.sock
+          imagePullPolicy: "IfNotPresent"
+          volumeMounts:
+            - name: socket-dir
+              mountPath: /var/lib/csi/sockets/pluginproxy/
+        - name: driver
+          resources:
+            limits:
+              memory: {{ .Values.resources.limits.memory }}
+              cpu: {{ .Values.resources.limits.cpu }}
+            requests:
+              memory: {{ .Values.resources.requests.memory }}
+              cpu: {{ .Values.resources.requests.cpu }}
+          securityContext:
+            privileged: true
+            capabilities:
+              add: ['SYS_ADMIN']
+            allowPrivilegeEscalation: true
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: "{{ .Values.image.pullPolicy }}"
+          args:
+            - --nodeid=$(KUBE_NODE_NAME)
+            - --endpoint=unix://csi/csi.sock
+            - --role=controller
+          env:
+            - name: KUBE_NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
+          volumeMounts:
+            - name: socket-dir
+              mountPath: /csi
+            - name: secret
+              mountPath: /config
+              readOnly: true
+            - name: host
+              mountPath: /host
+              mountPropagation: Bidirectional
+      volumes:
+        - name: socket-dir
+          emptyDir:
+        - name: secret
+          secret:
+            secretName: {{ .Values.secretName }}
+        - name: host
+          hostPath:
+            path: /
+            type: Directory
+---
