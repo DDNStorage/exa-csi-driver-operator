@@ -2,5 +2,5 @@
 - group: charts.my.domain
   version: v1alpha1
   kind: ExaCsi
-  chart: helm-charts/exa-csi
+  chart: helm-charts/exascaler-csi
 #+kubebuilder:scaffold:watch

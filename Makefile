@@ -28,8 +28,8 @@ BUNDLE_METADATA_OPTS ?= $(BUNDLE_CHANNELS) $(BUNDLE_DEFAULT_CHANNEL)
 # This variable is used to construct full image tags for bundle and catalog images.
 #
 # For example, running 'make bundle-build bundle-push catalog-build catalog-push' will build and push both
-# my.domain/exa-csi-driver-operator-bundle:$VERSION and my.domain/exa-csi-driver-operator-catalog:$VERSION.
-IMAGE_TAG_BASE ?= quay.io/ddn/exa-csi-driver-operator
+# my.domain/exascaler-csi-driver-operator-bundle:$VERSION and my.domain/exascaler-csi-driver-operator-catalog:$VERSION.
+IMAGE_TAG_BASE ?= quay.io/ddn/exascaler-csi-driver-operator
 
 # BUNDLE_IMG defines the image:tag used for the bundle.
 # You can use it as an arg. (E.g make bundle-build BUNDLE_IMG=<some-registry>/<project-name-bundle>:<tag>)
@@ -51,7 +51,7 @@ endif
 OPERATOR_SDK_VERSION ?= v1.32.0
 
 # Image URL to use all building/pushing image targets
-IMG ?= quay.io/ddn/exa-csi-driver-operator-controller:latest
+IMG ?= quay.io/ddn/exascaler-csi-driver-operator-controller:v$(VERSION)
 
 .PHONY: all
 all: podman-build
@@ -84,7 +84,7 @@ podman-build: ## Build podman image with the manager.
 	podman build -t ${IMG} .
 
 .PHONY: podman-push
-podman-push: ## Push podman image with the manager.
+podman-push: podman-build ## Push podman image with the manager.
 	podman push ${IMG}
 
 # PLATFORMS defines the target platforms for  the manager image be build to provide support to multiple

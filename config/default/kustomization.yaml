@@ -1,5 +1,5 @@
 # Adds namespace to all resources.
-namespace: exa-csi-driver-operator-system
+namespace: exascaler-csi-driver-operator-system
 
 # Value of this field is prepended to the
 # names of all resources, e.g. a deployment named

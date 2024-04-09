@@ -3,12 +3,12 @@ kind: ExaCsi
 metadata:
   name: exacsi-sample
 spec:
-  # Default values copied from <project_dir>/helm-charts/exa-csi/values.yaml
+  # Default values copied from <project_dir>/helm-charts/exascaler-csi/values.yaml
   image:
     pullPolicy: Always
     repository: quay.io/ddn/exascaler-csi-file-driver
     tag: master
-  namespace: exa-csi-driver-operator-system
+  namespace: exascaler-csi-driver-operator-system
   replicaCount: 1
   resources:
     limits:
