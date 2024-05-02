@@ -2,16 +2,14 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-namespace: "default"  # replace with non-default namespace name if needed
+namespace: "openshift-kmm"  # replace with non-default namespace name if needed
 volumeNamePrefix: "pvc-exa"
 
-replicaCount: 1
-
 image:
-  repository: "quay.io/ddn/exascaler-csi-file-driver"
+  repository: "quay.io/ddn/exascaler-openshift-file-driver"
   pullPolicy: "IfNotPresent"
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "v2.2.3"
+  tag: "v2.2.4"
 
 resources:
   limits:

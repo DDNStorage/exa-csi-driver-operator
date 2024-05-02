@@ -1,7 +1,7 @@
 exascaler_map:
   exa1:
     mountPoint: /exaFS                                          # mountpoint on the host where the exaFS will be mounted
-    exaFS: 10.204.86.114@tcp:/testfs                            # default path to exa filesystem
+    exaFS: 10.204.86.114@tcp:192.168.98.114@tcp:/testfs                            # default path to exa filesystem
     zone: zone-1
   exa2:
     mountPoint: /exaFS-zone-2                                          # mountpoint on the host where the exaFS will be mounted
@@ -11,4 +11,6 @@ exascaler_map:
     mountPoint: /exaFS-zone-3                                          # mountpoint on the host where the exaFS will be mounted
     exaFS: 10.204.86.114@tcp:/testfs/zone-3                            # default path to exa filesystem
     zone: zone-3
+
+openshift: true
 debug: true                                                 # more logs

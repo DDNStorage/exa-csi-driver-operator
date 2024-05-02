@@ -15,7 +15,7 @@ LABEL operators.operatorframework.io.test.mediatype.v1=scorecard+v1
 LABEL operators.operatorframework.io.test.config.v1=tests/scorecard/
 
 # Annotations to specify OCP versions compatibility.
-com.redhat.openshift.versions: v4.13
+LABEL com.redhat.openshift.versions=v4.13,v4.15
 
 # Copy files to locations specified by labels.
 COPY bundle/manifests /manifests/

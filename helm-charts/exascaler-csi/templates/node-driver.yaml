@@ -28,12 +28,20 @@ spec:
         # 1) registers the CSI driver with kubelet
         # 2) adds the drivers custom NodeId to a label on the Kubernetes Node API Object
         - name: driver-registrar
-          image: quay.io/k8scsi/csi-node-driver-registrar:v1.1.0
+          image: registry.k8s.io/sig-storage/csi-node-driver-registrar:v2.9.0
           imagePullPolicy: IfNotPresent
           args:
-            - --v=3
+            - --v=5
             - --csi-address=/csi/csi.sock
             - --kubelet-registration-path=/var/lib/kubelet/plugins_registry/exa.csi.ddn.com/csi.sock
+          livenessProbe:
+            exec:
+              command:
+              - /csi-node-driver-registrar
+              - --kubelet-registration-path=/var/lib/kubelet/plugins_registry/exa.csi.ddn.com/csi.sock
+              - --mode=kubelet-registration-probe
+            initialDelaySeconds: 30
+            timeoutSeconds: 15
           env:
             - name: KUBE_NODE_NAME
               valueFrom:
@@ -69,17 +77,24 @@ spec:
                 fieldRef:
                   fieldPath: spec.nodeName
           volumeMounts:
+            - name: kubelet-dir
+              mountPath: /var/lib/kubelet
+              mountPropagation: "Bidirectional"
+            - name: dev
+              mountPath: /dev
             - name: socket-dir
               mountPath: /csi
             - name: secret
               mountPath: /config
-            - name: host
-              mountPath: /host
-              mountPropagation: Bidirectional
-            - name: pods-mount-dir
-              mountPath: /var/lib/kubelet/pods
-              mountPropagation: Bidirectional
       volumes:
+        - name: kubelet-dir
+          hostPath:
+            path: /var/lib/kubelet
+            type: Directory
+        - name: dev
+          hostPath:
+            path: /dev
+            type: Directory
         - name: socket-dir
           hostPath:
             path: /var/lib/kubelet/plugins_registry/exa.csi.ddn.com
@@ -87,14 +102,6 @@ spec:
         - name: registration-dir
           hostPath:
             path: /var/lib/kubelet/plugins_registry/
-            type: Directory
-        - name: pods-mount-dir
-          hostPath:
-            path: /var/lib/kubelet/pods
-            type: Directory
-        - name: host
-          hostPath:
-            path: /
             type: Directory
         - name: secret
           secret:
