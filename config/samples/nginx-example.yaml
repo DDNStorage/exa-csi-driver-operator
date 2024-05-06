@@ -18,9 +18,9 @@ parameters:
   # projectId: "100001"          # Points to a project id to be used to set volume quota.
   exaMountUid: "1001"           # Uid which will be used to access the volume in pod. Should be synced between EXA server and clients.
   # bindMount: "false"
-  exaFS: "fs-01a3b4805edae419d.fsx.us-west-2.amazonaws.com@tcp:/mm4ezbev"   # Overrides exaFS value from config. Use this to support multiple EXA filesystems.
+  exaFS: "10.204.86.114@tcp:/testfs"   # Overrides exaFS value from config. Use this to support multiple EXA filesystems.
   mountOptions: relatime,flock 
-  mountPoint: "/fsx"
+  mountPoint: "/exaFS"
 ---
 
 # ------------------------------------------------

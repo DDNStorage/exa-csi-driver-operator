@@ -5,4 +5,4 @@ kind: Kustomization
 images:
 - name: controller
   newName: quay.io/ddn/exascaler-csi-driver-operator-controller
-  newTag: latest
+  newTag: v2.2.4

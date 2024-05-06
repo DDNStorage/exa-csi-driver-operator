@@ -1,0 +1,17 @@
+apiVersion: operators.coreos.com/v1alpha1
+kind: CatalogSource
+metadata:
+  name: exascaler-catalog
+  namespace: openshift-marketplace
+spec:
+  displayName: exascaler-catalog
+  icon:
+    base64data: ""
+    mediatype: ""
+  image: quay.io/ddn/exascaler-csi-driver-operator-catalog:v2.2.4
+  priority: -200
+  publisher: DDN
+  sourceType: grpc
+  updateStrategy:
+    registryPoll:
+      interval: 10m0s

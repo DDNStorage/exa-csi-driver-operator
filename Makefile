@@ -3,7 +3,7 @@
 # To re-generate a bundle for another specific version without changing the standard setup, you can:
 # - use the VERSION as arg of the bundle target (e.g make bundle VERSION=0.0.2)
 # - use environment variables to overwrite this value (e.g export VERSION=0.0.2)
-VERSION ?= 1.0.1
+VERSION ?= 2.2.4
 
 # CHANNELS define the bundle channels used in the bundle.
 # Add a new line here if you would like to change its default config. (E.g CHANNELS = "candidate,fast,stable")
@@ -84,7 +84,7 @@ podman-build: ## Build podman image with the manager.
 	podman build -t ${IMG} .
 
 .PHONY: podman-push
-podman-push: podman-build ## Push podman image with the manager.
+podman-push: ## Push podman image with the manager.
 	podman push ${IMG}
 
 # PLATFORMS defines the target platforms for  the manager image be build to provide support to multiple
