@@ -16,7 +16,7 @@ metadata:
               "repository": "quay.io/ddn/exascaler-csi-file-driver",
               "tag": "v2.2.4"
             },
-            "namespace": "exa-csi-driver-operator-system",
+            "namespace": "exascaler-csi-driver-operator-system",
             "replicaCount": 1,
             "resources": {
               "limits": {
@@ -40,7 +40,7 @@ metadata:
     operators.operatorframework.io/project_layout: helm.sdk.operatorframework.io/v1
     repository: https://github.com/DDNStorage/exa-csi-driver
   name: exascaler-csi-driver-operator.v2.2.4
-  namespace: exa-csi-driver-operator-system
+  namespace: exascaler-csi-driver-operator-system
 spec:
   apiservicedefinitions: {}
   customresourcedefinitions:
@@ -345,17 +345,17 @@ spec:
           - subjectaccessreviews
           verbs:
           - create
-        serviceAccountName: exa-csi-driver-operator-controller-manager
+        serviceAccountName: exascaler-csi-driver-operator-controller-manager
       deployments:
       - label:
           app.kubernetes.io/component: manager
-          app.kubernetes.io/created-by: exa-csi-driver-operator
+          app.kubernetes.io/created-by: exascaler-csi-driver-operator
           app.kubernetes.io/instance: controller-manager
           app.kubernetes.io/managed-by: kustomize
           app.kubernetes.io/name: deployment
-          app.kubernetes.io/part-of: exa-csi-driver-operator
+          app.kubernetes.io/part-of: exascaler-csi-driver-operator
           control-plane: controller-manager
-        name: exa-csi-driver-operator-controller-manager
+        name: exascaler-csi-driver-operator-controller-manager
         spec:
           replicas: 1
           selector:
@@ -413,7 +413,7 @@ spec:
                 - --health-probe-bind-address=:8081
                 - --metrics-bind-address=127.0.0.1:8080
                 - --leader-elect
-                - --leader-election-id=exa-csi-driver-operator
+                - --leader-election-id=exascaler-csi-driver-operator
                 image: quay.io/ddn/exascaler-csi-driver-operator-controller:v2.2.4
                 livenessProbe:
                   httpGet:
@@ -442,7 +442,7 @@ spec:
                     - ALL
               securityContext:
                 runAsNonRoot: true
-              serviceAccountName: exa-csi-driver-operator-controller-manager
+              serviceAccountName: exascaler-csi-driver-operator-controller-manager
               terminationGracePeriodSeconds: 10
       permissions:
       - rules:
@@ -477,7 +477,7 @@ spec:
           verbs:
           - create
           - patch
-        serviceAccountName: exa-csi-driver-operator-controller-manager
+        serviceAccountName: exascaler-csi-driver-operator-controller-manager
     strategy: deployment
   installModes:
   - supported: true
