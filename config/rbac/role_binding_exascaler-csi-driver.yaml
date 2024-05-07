@@ -2,14 +2,14 @@
 kind: ClusterRoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  name: exascaler-csi-controller-cluster-role-binding
+  name: exascaler-driver-role-binding
 subjects:
   - kind: ServiceAccount
     name: exascaler-csi-controller-service-account
     namespace: placeholder
 roleRef:
   kind: ClusterRole
-  name: exascaler-csi-controller-cluster-role
+  name: exascaler-csi-driver-cluster-role
   apiGroup: rbac.authorization.k8s.io
 
 ---

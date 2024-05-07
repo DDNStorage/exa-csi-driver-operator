@@ -1,7 +1,7 @@
 kind: ClusterRole
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  name: exascaler-csi-controller-cluster-role
+  name: exascaler-csi-driver-cluster-role
 rules:
   - apiGroups: ['']
     resources: ['secrets']
@@ -17,7 +17,7 @@ rules:
     verbs: ['get', 'list', 'watch']
   - apiGroups: ['']
     resources: ['events']
-    verbs: ['list', 'watch', 'create', 'update', 'patch']
+    verbs: ['get', 'list', 'watch', 'create', 'update', 'patch']
   - apiGroups: ['snapshot.storage.k8s.io']
     resources: ['volumesnapshots']
     verbs: ['get', 'list']
@@ -26,7 +26,7 @@ rules:
     verbs: ['get', 'list']
   # attacher specific
   - apiGroups: ['']
-    resources: ['nodes']
+    resources: ['nodes', 'pods']
     verbs: ['get', 'list', 'watch']
   - apiGroups: ['csi.storage.k8s.io']
     resources: ['csinodeinfos']
