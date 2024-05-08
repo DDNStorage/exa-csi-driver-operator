@@ -31,7 +31,7 @@ roleRef:
 kind: RoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  name: csi-resizer-role-cfg
+  name: resizer-role-cfg
 subjects:
   - kind: ServiceAccount
     name: exascaler-csi-driver-service-account
