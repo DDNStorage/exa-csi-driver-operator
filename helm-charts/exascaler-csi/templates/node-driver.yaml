@@ -21,7 +21,7 @@ spec:
       labels:
         app: exascaler-csi-node
     spec:
-      serviceAccount: exascaler-csi-node-service-account
+      serviceAccount: exascaler-csi-driver-service-account
       hostNetwork: true
       containers:
         # driver-registrar: sidecar container that:

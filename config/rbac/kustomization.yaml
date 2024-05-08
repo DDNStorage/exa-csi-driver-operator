@@ -17,11 +17,8 @@ resources:
 - auth_proxy_role_binding.yaml
 - auth_proxy_client_clusterrole.yaml
 # extra service accounts from helm charts
-- service_account_exascaler-csi-controller.yaml
-- service_account_exascaler-csi-node.yaml
-- role_exascaler-csi-controller.yaml
-- role_exascaler-csi-node.yaml
-- role_binding_exascaler-csi-controller.yaml
-- role_binding_exascaler-csi-node.yaml
+- service_account_exascaler-csi-driver.yaml
+- role_exascaler-csi-driver.yaml
+- role_binding_exascaler-csi-driver.yaml
 - priviledged-scc-role.yaml
 - priviledged-scc-role-binding.yaml

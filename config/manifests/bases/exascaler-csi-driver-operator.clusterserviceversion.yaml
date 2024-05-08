@@ -118,7 +118,7 @@ spec:
     oc apply -n openshift-kmm -f deploy/openshift/lustre-module/lustre-mod.yaml
     ```
 
-    - To verify the modules are loaded and the configuration is set correctly on any particular node, you can open a debug session using your ModuleLoader image:
+    To verify the modules are loaded and the configuration is set correctly on any particular node, you can open a debug session using your ModuleLoader image:
     ```bash
     oc debug node/my-node
 
