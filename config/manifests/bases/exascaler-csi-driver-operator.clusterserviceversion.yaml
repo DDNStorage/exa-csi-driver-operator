@@ -345,7 +345,7 @@ spec:
           - subjectaccessreviews
           verbs:
           - create
-        serviceAccountName: exascaler-csi-driver-operator-controller-manager
+        serviceAccountName: exascaler-csi-driver-service-account
       deployments:
       - label:
           app.kubernetes.io/component: manager
