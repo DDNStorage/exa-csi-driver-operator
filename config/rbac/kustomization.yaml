@@ -22,3 +22,6 @@ resources:
 - role_binding_exascaler-csi-driver.yaml
 - priviledged-scc-role.yaml
 - priviledged-scc-role-binding.yaml
+
+configurations:
+  - nameReference.yaml

@@ -1,0 +1,9 @@
+nameReference:
+  - kind: ClusterRole
+    fieldSpecs:
+      - kind: ClusterRoleBinding
+        path: spec/roleRef/name
+  - kind: ServiceAccount
+    fieldSpecs:
+    - kind: ClusterRoleBinding
+      path: spec/subjects/*/name
