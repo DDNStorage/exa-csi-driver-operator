@@ -51,7 +51,7 @@ endif
 OPERATOR_SDK_VERSION ?= v1.32.0
 
 # Image URL to use all building/pushing image targets
-IMG ?= quay.io/ddn/exascaler-csi-driver-operator-controller:v$(VERSION)
+IMG ?= $(IMAGE_TAG_BASE)-controller:v$(VERSION)
 
 .PHONY: all
 all: podman-build

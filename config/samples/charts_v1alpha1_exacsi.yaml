@@ -8,7 +8,6 @@ spec:
     pullPolicy: Always
     repository: quay.io/ddn/exascaler-csi-file-driver
     tag: v2.2.4
-  namespace: exascaler-csi-driver-operator-system
   replicaCount: 1
   resources:
     limits:

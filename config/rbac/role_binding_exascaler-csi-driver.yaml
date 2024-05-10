@@ -5,11 +5,10 @@ metadata:
   name: driver-role-binding
 subjects:
   - kind: ServiceAccount
-    name: exascaler-csi-driver-service-account
-    namespace: placeholder
+    name: driver-service-account
 roleRef:
   kind: ClusterRole
-  name: exascaler-csi-driver-cluster-role
+  name: driver-cluster-role
   apiGroup: rbac.authorization.k8s.io
 
 ---
