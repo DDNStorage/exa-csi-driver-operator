@@ -6,7 +6,7 @@ spec:
   # Default values copied from <project_dir>/helm-charts/exascaler-csi/values.yaml
   image:
     pullPolicy: Always
-    repository: quay.io/ddn/exascaler-csi-file-driver
+    repository: quay.io/ddn/exascaler-openshift-file-driver
     tag: v2.2.4
   replicaCount: 1
   resources:

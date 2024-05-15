@@ -59,9 +59,7 @@ spec:
     ```
 
     This will build the rpms and install the client.
-    Upload the rpms to any repository available from the cluster.and
-
-    Download exa-csi-driver manifests
+    Upload the rpms to any repository available from the cluster and download exa-csi-driver manifests
     ```bash
       git clone https://github.com/DDNStorage/exa-csi-driver.git && cd exa-csi-driver
     ```

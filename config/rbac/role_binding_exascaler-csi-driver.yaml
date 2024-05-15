@@ -5,7 +5,8 @@ metadata:
   name: driver-role-binding
 subjects:
   - kind: ServiceAccount
-    name: driver-service-account
+    name: exascaler-csi-driver-service-account
+    namespace: openshift-operators
 roleRef:
   kind: ClusterRole
   name: driver-cluster-role
@@ -15,11 +16,11 @@ roleRef:
 kind: ClusterRoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  name: csi-resizer-binding
+  name: resizer-binding
 subjects:
   - kind: ServiceAccount
     name: exascaler-csi-driver-service-account
-    namespace: placeholder
+    namespace: openshift-operators
 roleRef:
   kind: ClusterRole
   name: csi-resizer-role
@@ -34,6 +35,7 @@ metadata:
 subjects:
   - kind: ServiceAccount
     name: exascaler-csi-driver-service-account
+    namespace: openshift-operators
 roleRef:
   kind: Role
   name: external-resizer-cfg
