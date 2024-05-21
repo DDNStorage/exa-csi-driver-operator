@@ -6,7 +6,7 @@ LABEL operators.operatorframework.io.bundle.manifests.v1=manifests/
 LABEL operators.operatorframework.io.bundle.metadata.v1=metadata/
 LABEL operators.operatorframework.io.bundle.package.v1=exascaler-csi-driver-operator
 LABEL operators.operatorframework.io.bundle.channels.v1=alpha
-LABEL operators.operatorframework.io.metrics.builder=operator-sdk-v1.28.1
+LABEL operators.operatorframework.io.metrics.builder=operator-sdk-v1.32.0
 LABEL operators.operatorframework.io.metrics.mediatype.v1=metrics+v1
 LABEL operators.operatorframework.io.metrics.project_layout=helm.sdk.operatorframework.io/v1
 
@@ -15,7 +15,7 @@ LABEL operators.operatorframework.io.test.mediatype.v1=scorecard+v1
 LABEL operators.operatorframework.io.test.config.v1=tests/scorecard/
 
 # Annotations to specify OCP versions compatibility.
-LABEL com.redhat.openshift.versions=v4.13,v4.15
+LABEL com.redhat.openshift.versions="v4.13-v4.15"
 
 # Copy files to locations specified by labels.
 COPY bundle/manifests /manifests/
