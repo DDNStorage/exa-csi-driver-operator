@@ -11,7 +11,7 @@ metadata:
     features.operators.openshift.io/token-auth-aws: "false"
     features.operators.openshift.io/token-auth-azure: "false"
     features.operators.openshift.io/token-auth-gcp: "false"
-  name: exascaler-csi-driver-operator.v2.2.4
+  name: exascaler-csi-driver-operator.v2.2.5
   namespace: placeholder
 spec:
   apiservicedefinitions: {}
@@ -75,7 +75,6 @@ spec:
     Before loading the lustre modules, make sure to install Openshift Kernel Module Management (KMM) via Openshift console.
 
     ```bash
-    oc create -n openshift-kmm -f deploy/openshift/lustre-module/lustre-dockerfile-configmap.yaml
     oc apply -n openshift-kmm -f deploy/openshift/lustre-module/lnet-mod.yaml
     ```
     Wait for the builder pod (e.g. `lnet-build-5f265-build`) to finish. After builder finishes,
@@ -118,9 +117,27 @@ spec:
                   0: br-ex
     ```
 
-    Modify config file and create secret from it
-    ```bash
-      oc create secret generic exascaler-csi-file-driver-config --from-file=deploy/openshift/exascaler-csi-file-driver-config.yaml
+    #### Modify config in the operator's instance yaml to match your ExaScaler setup before creating an instance.
+
+    ```
+      # exascaler driver specific config
+      config:
+        exascaler_map:
+          exa1:
+            mountPoint: /exaFS                                          # mountpoint on the host where the exaFS will be mounted
+            exaFS: 10.204.86.114@tcp:/testfs                            # default path to exa filesystem
+            zone: zone-1
+          exa2:
+            mountPoint: /exaFS-zone-2                                          # mountpoint on the host where the exaFS will be mounted
+            exaFS: 10.204.86.114@tcp:/testfs/zone-2                            # default path to exa filesystem
+            zone: zone-2
+          exa3:
+            mountPoint: /exaFS-zone-3                                          # mountpoint on the host where the exaFS will be mounted
+            exaFS: 10.204.86.114@tcp:/testfs/zone-3                            # default path to exa filesystem
+            zone: zone-3
+        debug: false
+        openshift: true
+
     ```
 
   displayName: EXAScaler CSI File Driver
@@ -159,4 +176,4 @@ spec:
   provider:
     name: DataDirect Networks
     url: https://www.ddn.com
-  version: 2.2.4
+  version: 2.2.5

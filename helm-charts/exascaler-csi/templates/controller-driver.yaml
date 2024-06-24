@@ -11,7 +11,6 @@ spec:
   podInfoOnMount: false
 ---
 
-
 # ---------------------------------
 # Exascaler CSI Controller Server
 # ---------------------------------
@@ -37,6 +36,7 @@ kind: Deployment
 apiVersion: apps/v1
 metadata:
   name: exascaler-csi-controller
+  namespace: {{ .Values.Namespace }}
 spec:
   # serviceName: exascaler-csi-controller-service
   selector:
@@ -48,24 +48,38 @@ spec:
         app: exascaler-csi-controller
     spec:
       serviceAccount: exascaler-csi-driver-service-account
+      priorityClassName: {{ .Values.priorityClassName }}
       containers:
         # csi-provisioner: sidecar container that watches Kubernetes PersistentVolumeClaim objects
         # and triggers CreateVolume/DeleteVolume against a CSI endpoint
         - name: csi-provisioner
-          image: registry.k8s.io/sig-storage/csi-provisioner:v3.6.3
-          imagePullPolicy: IfNotPresent
+          resources: {{ .Values.resources | default .Values.provisioner.resources | toYaml | nindent 12 }}
+          image: {{ .Values.provisioner.repository }}:{{ .Values.provisioner.tag }}
+          imagePullPolicy: {{ .Values.provisioner.pullPolicy }}
           args:
             - --csi-address=/csi/csi.sock
             - --volume-name-prefix={{ .Values.volumeNamePrefix }}
             - --strict-topology
             - --immediate-topology=false
             - --feature-gates=Topology=true
+          env:
+            - name: GOMEMLIMIT
+              valueFrom:
+                resourceFieldRef:
+                  divisor: "0"
+                  resource: limits.memory
+            - name: GOMAXPROCS
+              valueFrom:
+                resourceFieldRef:
+                  divisor: "0"
+                  resource: limits.cpu
           volumeMounts:
             - name: socket-dir
               mountPath: /csi
         - name: csi-attacher
-          image: registry.k8s.io/sig-storage/csi-attacher:v4.4.0
-          imagePullPolicy: IfNotPresent
+          resources: {{ .Values.resources | default .Values.attacher.resources | toYaml | nindent 12 }}
+          image: {{ .Values.attacher.repository }}:{{ .Values.attacher.tag }}
+          imagePullPolicy: {{ .Values.attacher.pullPolicy }}
           args:
             - --csi-address=$(ADDRESS)
             - --v=2
@@ -73,28 +87,43 @@ spec:
           env:
             - name: ADDRESS
               value: /csi/csi.sock
+            - name: GOMEMLIMIT
+              valueFrom:
+                resourceFieldRef:
+                  divisor: "0"
+                  resource: limits.memory
+            - name: GOMAXPROCS
+              valueFrom:
+                resourceFieldRef:
+                  divisor: "0"
+                  resource: limits.cpu
           volumeMounts:
             - name: socket-dir
               mountPath: /csi/
         - name: csi-resizer
-          image: k8s.gcr.io/sig-storage/csi-resizer:v1.4.0
+          resources: {{ .Values.resources | default .Values.resizer.resources | toYaml | nindent 12 }}
+          image: {{ .Values.resizer.repository }}:{{ .Values.resizer.tag }}
+          imagePullPolicy: {{ .Values.resizer.pullPolicy }}
           args:
             - "--csi-address=$(ADDRESS)"
           env:
             - name: ADDRESS
               value: /csi/csi.sock
-          imagePullPolicy: "IfNotPresent"
+            - name: GOMEMLIMIT
+              valueFrom:
+                resourceFieldRef:
+                  divisor: "0"
+                  resource: limits.memory
+            - name: GOMAXPROCS
+              valueFrom:
+                resourceFieldRef:
+                  divisor: "0"
+                  resource: limits.cpu
           volumeMounts:
             - name: socket-dir
               mountPath: /csi/
         - name: driver
-          resources:
-            limits:
-              memory: {{ .Values.resources.limits.memory }}
-              cpu: {{ .Values.resources.limits.cpu }}
-            requests:
-              memory: {{ .Values.resources.requests.memory }}
-              cpu: {{ .Values.resources.requests.cpu }}
+          resources: {{ .Values.resources | default .Values.image.resources | toYaml | nindent 12 }}
           securityContext:
             privileged: true
             capabilities:
@@ -111,6 +140,16 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: spec.nodeName
+            - name: GOMEMLIMIT
+              valueFrom:
+                resourceFieldRef:
+                  divisor: "0"
+                  resource: limits.memory
+            - name: GOMAXPROCS
+              valueFrom:
+                resourceFieldRef:
+                  divisor: "0"
+                  resource: limits.cpu
           volumeMounts:
             - name: socket-dir
               mountPath: /csi
@@ -119,6 +158,7 @@ spec:
               readOnly: true
             - name: dev
               mountPath: /dev
+              mountPropagation: Bidirectional
       volumes:
         - name: socket-dir
           hostPath:
